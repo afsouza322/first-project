@@ -1,0 +1,103 @@
+package hw4;
+
+import java.util.ArrayList;
+
+public class WordGame {
+
+	public static String[] search(String[] dict, char[][] board) {
+
+		ArrayList<String> ret = new ArrayList<String>();
+		int height = board.length;
+
+		int width = board.length == 0 ? 0 : board[0].length;
+
+		String singleLet = new String();
+		String tempString = new String();
+		int counter = 0;
+
+		// COME UP WITH SINGLE-LETTER STRINGS AND CHECK IF THEY ARE IN THE DICTIONARY:
+		for (int row = 0; row <= height - 1; row++) {
+			for (int col = 0; col <= width - 1; col++) {
+				singleLet = Character.toString(board[row][col]);
+				if (WordGameHelperClass.inDictionary(dict, singleLet) == true) {
+					ret.add(counter, singleLet);
+					counter++;
+				}
+			}
+		}
+
+		// --VERTICAL DIRECTION:
+		for (int j = 0; j <= height - 1; j++) {
+			for (int i = 0; i <= width - 1; i++) {
+				tempString = "";
+				for (int k = j; k <= height - 1; k++) {
+					String newString = Character.toString(board[k][i]);
+					tempString = tempString + newString;
+					if (WordGameHelperClass.inDictionary(dict, tempString) == true && tempString.length() != 1) {
+						ret.add(counter, tempString);
+						counter++;
+					}
+				}
+				tempString = "";
+				for (int k = j; k >= 0; k--) {
+					String newString = Character.toString(board[k][i]);
+					tempString = tempString + newString;
+					if (WordGameHelperClass.inDictionary(dict, tempString) == true && tempString.length() != 1) {
+						ret.add(counter, tempString);
+						counter++;
+					}
+				}
+
+			}
+		}
+		// --HORIZONTAL DIRECTION
+		for (int j = 0; j <= width - 1; j++) {
+			for (int i = 0; i <= height - 1; i++) {
+				tempString = "";
+				for (int k = j; k <= width - 1; k++) {
+					String newString = Character.toString(board[i][k]);
+					tempString = tempString + newString;
+					if (WordGameHelperClass.inDictionary(dict, tempString) == true && tempString.length() != 1) {
+						ret.add(counter, tempString);
+						counter++;
+					}
+
+				}
+				tempString = "";
+				for (int k = j; k >= 0; k--) {
+					String newString = Character.toString(board[i][k]);
+					tempString = tempString + newString;
+					if (WordGameHelperClass.inDictionary(dict, tempString) == true && tempString.length() != 1) {
+						ret.add(counter, tempString);
+						counter++;
+					}
+				}
+
+			}
+		}
+
+		// TODO (10% of your grade): if your board
+		// has height h and width w, how many strings
+		// do you need to check using inDictionary
+		// (assume that you do nothing to filter out
+		// duplicates or, equivalently, that the board
+		// is such that there are no duplicates)
+		// ANSWER: max*h*w, where max = (h+w)-1
+		/*
+		 * EXPLANATION OF THE ANSWER: In order to calculate the maximum number of
+		 * strings formed by each character, I need to consider that formed by a
+		 * character in the middle of the board, which can form a string with itself and
+		 * in four directions. Suppose this number of strings is 'max.' This number is
+		 * also equal to the height added to the width, but subtracted by 1, because
+		 * when we form strings in another direction after considering one direction, we
+		 * have already counted the string it forms with itself. Then, we must form
+		 * strings in four directions with each character, essentially spanning the area
+		 * of the board, which is equal to the number of rows multiplied by the number
+		 * of columns, so we multiply the maximum by the number of rows, h * columns, w.
+		 * The total number of strings formed is therefore max * h * w.
+		 */
+
+		return ret.toArray(new String[0]);
+
+	}
+}
